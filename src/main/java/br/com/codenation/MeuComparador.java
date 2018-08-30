@@ -13,15 +13,15 @@ public class MeuComparador implements Comparator<Object>{
         Jogador B = (Jogador) o2;
         if(A.getNivelHabilidade() > B.getNivelHabilidade())
         {
-            return -1;
+            return 1;
         }
         else if(A.getNivelHabilidade() < B.getNivelHabilidade())
         {
-            return 1;
+            return -1;
         }
         else if(A.getNivelHabilidade() == B.getNivelHabilidade())
         {
-            if(A.getId() < B.getId())
+            if(A.getId() > B.getId())
                 return -1;
             else
                 return 1;

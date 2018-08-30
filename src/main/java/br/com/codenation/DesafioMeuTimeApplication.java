@@ -156,26 +156,18 @@ public class DesafioMeuTimeApplication implements MeuTimeInterface {
 	        {
 	            if(aux.getId().compareTo(idTime) == 0)
 	            {
-	                Integer max = 0;
-	                Long id = null;
+
+	                List<Jogador> sss = new ArrayList<Jogador>();
 	                for(Jogador jogador : jogadores)
 	                {
 	                    if(jogador.getIdTime().compareTo(idTime) == 0)
 	                    {
-	                        if(id == null )
-	                        {
-	                            id = jogador.getId();
-	                            max = jogador.getNivelHabilidade();
-	                        }
-	                        else if(jogador.getNivelHabilidade() > max )
-	                        {
-	                           id = jogador.getId();
-	                           max = jogador.getNivelHabilidade();
-	                        }
+	                       sss.add(jogador);
 	                    }
 	                  
 	                }
-	                return id;
+	                Jogador kkkk = Collections.max(sss,new MeuComparador());
+	                return kkkk.getId();
 	            }
 	        }
 	        throw new br.com.codenation.desafio.exceptions.TimeNaoEncontradoException();
@@ -186,41 +178,34 @@ public class DesafioMeuTimeApplication implements MeuTimeInterface {
 	public Long buscarJogadorMaisVelho(Long idTime) {
 		for(Time aux : times)
         {
-            if(aux.getId().compareTo(idTime) == 0)
-            {
-                Integer max = 0;
-                Jogador neymar = null;
-                for(Jogador jogador : jogadores)
-                {
-                    
-                    if(jogador.getIdTime().compareTo(idTime) == 0)
-                    {
-                        if(neymar == null )
-                        {
-                            
-                            neymar = jogador;
-                            max = Math.abs(jogador.getDataNascimento().compareTo(LocalDate.now()));
-                        }
-                        else if(Math.abs(jogador.getDataNascimento().compareTo(LocalDate.now())) > max )
-                        {
-                            
-                           neymar = jogador;
-                           max = jogador.getDataNascimento().compareTo(LocalDate.now());
-                        }
-                        else if(Math.abs(jogador.getDataNascimento().compareTo(LocalDate.now())) == max)
-                        {
-                            
-                            if(neymar.getId() > jogador.getId())
-                            {
-                                neymar = jogador;
-                            }
-                        }
+			if(aux.getId().compareTo(idTime) == 0)
+			{
+				Jogador neymar = null;
+				for(Jogador jogador : jogadores)
+				{
+					if(jogador.getIdTime().compareTo(idTime) == 0)
+					{						
+					
+						if(neymar == null)
+							neymar = jogador;
+						else
+						{
+							if(jogador.getDataNascimento().compareTo(neymar.getDataNascimento()) == 0)
+							{
+								if(jogador.getId() < neymar.getId())
+									neymar = jogador;
+							}
+							else if(jogador.getDataNascimento().compareTo(neymar.getDataNascimento()) < 0)
+							{
+								neymar = jogador;
+							}
+						}
+					}
+				}
+				if(neymar != null)
+					return neymar.getId();
+			}
 
-                    }
-                  
-                }
-                return neymar.getId();
-            }
         }
         throw new br.com.codenation.desafio.exceptions.TimeNaoEncontradoException();
         //throw new UnsupportedOperationException("Time não encontrado."); 
@@ -319,6 +304,7 @@ public class DesafioMeuTimeApplication implements MeuTimeInterface {
             }
          
             Collections.sort(topJogadores, new MeuComparador());
+            Collections.reverse(topJogadores);
           
             if(topJogadores.size() > top)
             {
@@ -349,6 +335,8 @@ public class DesafioMeuTimeApplication implements MeuTimeInterface {
 	            if(aux.getId().compareTo(timeDeFora) == 0)
 	                time_timeDeFora = aux;
 		}
+		if(time_timeDaCasa == null || time_timeDeFora == null)
+			throw new br.com.codenation.desafio.exceptions.TimeNaoEncontradoException();
 		if(time_timeDaCasa.getCorUniformePrincipal().equals(time_timeDeFora.getCorUniformePrincipal()))
 		{
 	            return time_timeDeFora.getCorUniformeSecundario();
